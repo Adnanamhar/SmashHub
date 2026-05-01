@@ -6,22 +6,12 @@ SmashHub adalah platform berbasis web untuk penyewaan lapangan badminton secara 
 
 | Item | Link |
 |------|------|
-| 🌐 **Deploy (Vercel)** | [smash-hub-gamma.vercel.app](https://smash-hub-gamma.vercel.app/) |
+| 🌐 **Deploy (Vercel)** | https://smash-hub-gamma.vercel.app/ |
 | 📦 **Repository GitHub** | [github.com/Adnanamhar/SmashHub](https://github.com/Adnanamhar/SmashHub) |
 
 ## 📸 Screenshot
 
-### Halaman Utama (Homepage)
-![Homepage](public/screenshots/homepage.png)
-
-### Login Modal
-![Login](public/screenshots/login.png)
-
-### Owner Dashboard
-![Owner Dashboard](public/screenshots/owner_dashboard.png)
-
-### User Dashboard
-![User Dashboard](public/screenshots/user_dashboard.png)
+> *Screenshot akan ditambahkan setelah deployment*
 
 ## ✨ Fitur Utama
 
@@ -195,10 +185,10 @@ smashhub/
 
 ## 👥 Tim Pengembang
 
-| Nama | NIM | Role |
+| Nama | NIM | Kelas |
 |------|-----|------|
-| *[Isi nama]* | *[Isi NIM]* | *[Isi role]* |
+| *Adnan Amhar* | *202310370311001* | *Rekayasa Kebutuhan D* |
 
 ## 📝 Lisensi
 
-Project ini dibuat untuk keperluan **Tugas Besar Praktikum Mobile** — 2026.
+Project ini dibuat untuk keperluan **Daily Project 7** — 2026.
