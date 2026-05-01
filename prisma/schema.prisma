@@ -1,0 +1,33 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Court {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String   @default("Reguler")
+  price     Int
+  status    String   @default("Tersedia")
+  owner_id  String   @default("owner_1")
+  created_at DateTime @default(now())
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  title     String
+  level     String   @default("Beginner")
+  time      String
+  quota     Int
+  joined    Int      @default(0)
+  owner     String   @default("GOR SmashHub")
+  court_id  Int?
+  created_at DateTime @default(now())
+}
