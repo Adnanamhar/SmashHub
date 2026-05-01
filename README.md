@@ -11,7 +11,17 @@ SmashHub adalah platform berbasis web untuk penyewaan lapangan badminton secara 
 
 ## 📸 Screenshot
 
-> *Screenshot akan ditambahkan setelah deployment*
+### Halaman Utama (Homepage)
+![Homepage](public/screenshots/homepage.png)
+
+### Login Modal
+![Login](public/screenshots/login.png)
+
+### Owner Dashboard
+![Owner Dashboard](public/screenshots/owner_dashboard.png)
+
+### User Dashboard
+![User Dashboard](public/screenshots/user_dashboard.png)
 
 ## ✨ Fitur Utama
 
