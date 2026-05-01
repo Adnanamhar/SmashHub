@@ -6,8 +6,8 @@ SmashHub adalah platform berbasis web untuk penyewaan lapangan badminton secara 
 
 | Item | Link |
 |------|------|
-| 🌐 **Deploy (Vercel)** | *[akan diisi setelah deploy]* |
-| 📦 **Repository GitHub** | *[akan diisi setelah push]* |
+| 🌐 **Deploy (Vercel)** | [smash-hub-gamma.vercel.app](https://smash-hub-gamma.vercel.app/) |
+| 📦 **Repository GitHub** | [github.com/Adnanamhar/SmashHub](https://github.com/Adnanamhar/SmashHub) |
 
 ## 📸 Screenshot
 
