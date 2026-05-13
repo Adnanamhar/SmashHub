@@ -19,13 +19,17 @@ SmashHub adalah platform berbasis web untuk penyewaan lapangan badminton secara 
 - Login dengan akun dummy (`user/123`)
 - Booking lapangan **real-time** (pilih lapangan → tanggal → jam)
 - Slot yang sudah dibooking **otomatis ditandai** dan tidak bisa dipilih
+- **Riwayat Booking Saya** — melihat dan membatalkan booking yang sudah dibuat
+- **Pembatalan Booking** — cancel booking langsung dari dashboard
 - Join event **Mabar** (Main Bareng) dengan validasi kuota
 - Indikator **"Sudah Join"** agar tidak join berkali-kali
 - Tampilan sisa kuota event secara real-time
+- **Optimistic UI** — aksi terasa instan tanpa menunggu server
 
 ### 🏢 Sisi Owner (Pemilik GOR)
 - Login dengan akun dummy (`owner/123`)
-- **CRUD Lapangan**: Tambah, lihat, dan hapus lapangan
+- **CRUD Lapangan Lengkap**: Tambah, lihat, **edit**, dan hapus lapangan
+- **Edit Lapangan**: Klik ikon ✏️ untuk mengubah nama, harga, dan status
 - **Tabel Booking Masuk**: Melihat semua booking dari user
 - **Buat Event Mabar**: Publish event dengan kuota
 - **Daftar Peserta Event**: Melihat siapa saja yang join setiap event
@@ -34,6 +38,11 @@ SmashHub adalah platform berbasis web untuk penyewaan lapangan badminton secara 
 - Login via popup modal (tombol "LOGIN KONSOL" di navbar)
 - Semua CTA button mengarahkan ke login terlebih dahulu
 - Session tersimpan di `localStorage`
+
+### 🎨 UI/UX Improvements
+- **Toast Notification** — feedback visual modern menggantikan `alert()` bawaan browser
+- **Skeleton Loading** — animasi loading saat data sedang di-fetch dari server
+- **SEO Optimized** — metadata, Open Graph, dan keywords untuk search engine
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -94,18 +103,21 @@ Pengujian dilakukan berdasarkan aspek kualitas perangkat lunak sesuai standar **
 |----|-------------------|-------------------|----------------------|--------------|--------|
 | F01 | Login sebagai User | Klik LOGIN KONSOL → input `user/123` → Masuk Sekarang | Masuk ke User Dashboard | Berhasil masuk ke User Dashboard | ✅ Passed |
 | F02 | Login sebagai Owner | Klik LOGIN KONSOL → input `owner/123` → Masuk Sekarang | Masuk ke Owner Dashboard | Berhasil masuk ke Owner Dashboard | ✅ Passed |
-| F03 | Login dengan kredensial salah | Input username/password salah → Masuk | Muncul alert error | Muncul alert "Username atau Password salah!" | ✅ Passed |
+| F03 | Login dengan kredensial salah | Input username/password salah → Masuk | Muncul toast error | Muncul toast notification "Username atau Password salah!" | ✅ Passed |
 | F04 | Logout | Klik tombol logout di navbar | Kembali ke halaman home sebagai guest | Berhasil kembali ke home, role menjadi guest | ✅ Passed |
 | F05 | Tambah lapangan (Owner) | Isi form nama, tipe, harga → Simpan ke Database | Lapangan muncul di tabel | Lapangan berhasil tersimpan dan muncul di tabel | ✅ Passed |
-| F06 | Hapus lapangan (Owner) | Klik ikon trash pada lapangan → Konfirmasi | Lapangan terhapus dari tabel | Lapangan berhasil dihapus dari tabel dan database | ✅ Passed |
-| F07 | Booking lapangan (User) | Pilih lapangan → tanggal → jam → Konfirmasi Booking | Booking tersimpan, slot berubah merah | Booking tersimpan, slot bertanda ✗ dan tidak bisa diklik | ✅ Passed |
-| F08 | Booking slot yang sudah terisi | Pilih slot yang sudah merah/booked | Tidak bisa diklik | Tombol disabled, tidak bisa diklik | ✅ Passed |
-| F09 | Buat event mabar (Owner) | Isi nama event, jam, kuota → Publish | Event muncul di daftar user | Event berhasil tersimpan dan tampil di sisi user | ✅ Passed |
-| F10 | Join event (User) | Klik "Join Event" pada event tersedia | Berhasil join, tombol berubah hijau "Sudah Join" | Berhasil join, tombol berubah hijau dengan ikon ✓ | ✅ Passed |
-| F11 | Join event yang sudah di-join | Klik tombol "Sudah Join" | Tidak bisa join ulang | Tombol disabled (hijau), alert "Sudah join" jika dicoba | ✅ Passed |
-| F12 | Join event kuota penuh | Klik Join pada event dengan kuota 0 sisa | Muncul pesan "Kuota Penuh" | Tombol berubah abu-abu "Kuota Penuh", tidak bisa diklik | ✅ Passed |
-| F13 | Owner melihat peserta event | Buka Owner Dashboard → lihat "Peserta Event Mabar" | Tampil daftar user yang join | Tampil badge nama user per event | ✅ Passed |
-| F14 | Owner melihat booking masuk | Buka Owner Dashboard → lihat "Booking Masuk" | Tampil tabel booking | Tampil tabel booking dengan lapangan, tanggal, jam, user | ✅ Passed |
+| F06 | Edit lapangan (Owner) | Klik ikon ✏️ → ubah data → Update Lapangan | Data lapangan berubah di tabel | Data berhasil diupdate dan tabel ter-refresh | ✅ Passed |
+| F07 | Hapus lapangan (Owner) | Klik ikon trash pada lapangan → Konfirmasi | Lapangan terhapus dari tabel | Lapangan berhasil dihapus dari tabel dan database | ✅ Passed |
+| F08 | Booking lapangan (User) | Pilih lapangan → tanggal → jam → Konfirmasi Booking | Booking tersimpan, slot berubah merah | Booking tersimpan, slot bertanda ✗ dan tidak bisa diklik | ✅ Passed |
+| F09 | Booking slot yang sudah terisi | Pilih slot yang sudah merah/booked | Tidak bisa diklik | Tombol disabled, tidak bisa diklik | ✅ Passed |
+| F10 | Batalkan booking (User) | Klik "Batalkan" di Riwayat Booking Saya | Booking terhapus, slot kembali tersedia | Booking berhasil dibatalkan, slot kembali hijau | ✅ Passed |
+| F11 | Riwayat booking (User) | Buka User Dashboard → lihat "Riwayat Booking Saya" | Tampil tabel booking milik user | Tabel booking tampil dengan tombol Batalkan | ✅ Passed |
+| F12 | Buat event mabar (Owner) | Isi nama event, jam, kuota → Publish | Event muncul di daftar user | Event berhasil tersimpan dan tampil di sisi user | ✅ Passed |
+| F13 | Join event (User) | Klik "Join Event" pada event tersedia | Berhasil join, tombol berubah hijau "Sudah Join" | Berhasil join, tombol berubah hijau dengan ikon ✓ | ✅ Passed |
+| F14 | Join event yang sudah di-join | Klik tombol "Sudah Join" | Tidak bisa join ulang | Tombol disabled (hijau), toast "Sudah join" jika dicoba | ✅ Passed |
+| F15 | Join event kuota penuh | Klik Join pada event dengan kuota 0 sisa | Muncul pesan "Kuota Penuh" | Tombol berubah abu-abu "Kuota Penuh", tidak bisa diklik | ✅ Passed |
+| F16 | Owner melihat peserta event | Buka Owner Dashboard → lihat "Peserta Event Mabar" | Tampil daftar user yang join | Tampil badge nama user per event | ✅ Passed |
+| F17 | Owner melihat booking masuk | Buka Owner Dashboard → lihat "Booking Masuk" | Tampil tabel booking | Tampil tabel booking dengan lapangan, tanggal, jam, user | ✅ Passed |
 
 ### 2. Usability (Kemudahan Penggunaan)
 
@@ -113,9 +125,10 @@ Pengujian dilakukan berdasarkan aspek kualitas perangkat lunak sesuai standar **
 |----|-------------------|-------------------|----------------------|--------------|--------|
 | U01 | Navigasi antar halaman | Klik logo SmashHub, tombol CTA, navbar | Perpindahan halaman lancar tanpa error | Navigasi berjalan lancar, animasi transisi halus | ✅ Passed |
 | U02 | Responsif di mobile | Buka di viewport 375px | Layout menyesuaikan tanpa overflow | Layout responsif, grid berubah ke 1 kolom | ✅ Passed |
-| U03 | Feedback aksi pengguna | Lakukan booking, join event, tambah lapangan | Muncul feedback (alert/visual) setiap aksi | Alert muncul untuk setiap aksi, visual berubah sesuai | ✅ Passed |
+| U03 | Feedback aksi pengguna | Lakukan booking, join event, tambah lapangan | Muncul toast notification setiap aksi | Toast notification muncul (success/error) sesuai aksi | ✅ Passed |
 | U04 | Form tidak auto-scroll | Input data di form Owner Dashboard | Halaman tidak scroll ke atas saat mengetik | Halaman tetap di posisi form saat mengetik | ✅ Passed |
-| U05 | Indikator status jelas | Lihat status booking dan event | Warna badge sesuai status | Hijau = tersedia/confirmed, Merah = penuh/booked | ✅ Passed |
+| U05 | Indikator status jelas | Lihat status booking dan event | Warna badge sesuai status | Hijau = tersedia/confirmed, Merah = penuh/booked, Kuning = maintenance | ✅ Passed |
+| U06 | Loading state terlihat | Buka dashboard saat data loading | Tampil skeleton loading | Skeleton animasi muncul saat fetch data | ✅ Passed |
 
 ### 3. Reliability (Keandalan)
 
@@ -124,8 +137,9 @@ Pengujian dilakukan berdasarkan aspek kualitas perangkat lunak sesuai standar **
 | R01 | Data persisten setelah refresh | Tambah lapangan → refresh halaman | Data tetap ada | Data tetap tampil dari database Supabase | ✅ Passed |
 | R02 | Validasi duplikat booking | Booking slot yang sama 2x | Ditolak dengan pesan error | Server mengembalikan error 409 "Slot sudah dibooking" | ✅ Passed |
 | R03 | Validasi duplikat join event | Join event yang sama 2x | Ditolak | Server mengembalikan error 409 "Sudah join" | ✅ Passed |
-| R04 | Handling API error | Akses API dengan data invalid | Tidak crash, tampil error message | Aplikasi tetap berjalan, error di-handle dengan alert | ✅ Passed |
+| R04 | Handling API error | Akses API dengan data invalid | Tidak crash, tampil toast error | Aplikasi tetap berjalan, error di-handle dengan toast | ✅ Passed |
 | R05 | Session persist setelah refresh | Login → refresh halaman | Tetap login | Role tersimpan di localStorage, tetap login setelah refresh | ✅ Passed |
+| R06 | Optimistic UI rollback | Booking slot saat network error | UI rollback ke state sebelumnya | Slot kembali tersedia jika API gagal | ✅ Passed |
 
 ### 4. Performance Efficiency (Efisiensi Performa)
 
@@ -147,12 +161,31 @@ Pengujian dilakukan berdasarkan aspek kualitas perangkat lunak sesuai standar **
 
 | Aspek Kualitas | Jumlah Test | Passed | Failed | Persentase |
 |----------------|-------------|--------|--------|------------|
-| Functional Suitability | 14 | 14 | 0 | **100%** |
-| Usability | 5 | 5 | 0 | **100%** |
-| Reliability | 5 | 5 | 0 | **100%** |
+| Functional Suitability | 17 | 17 | 0 | **100%** |
+| Usability | 6 | 6 | 0 | **100%** |
+| Reliability | 6 | 6 | 0 | **100%** |
 | Performance Efficiency | 3 | 3 | 0 | **100%** |
 | Security | 3 | 3 | 0 | **100%** |
-| **Total** | **30** | **30** | **0** | **100%** |
+| **Total** | **35** | **35** | **0** | **100%** |
+
+---
+
+## 🔄 Changelog (Improvement v2.0)
+
+Berikut daftar improvement yang diterapkan pada versi terbaru:
+
+| # | Improvement | Deskripsi |
+|---|-------------|-----------|
+| 1 | **Refactor Arsitektur** | `page.tsx` dipecah dari 848 baris → ~140 baris + 16 file komponen/hooks |
+| 2 | **Toast Notification** | Semua `alert()` diganti dengan toast notification bergaya Neo-Brutalist |
+| 3 | **Skeleton Loading** | Tampilan loading animasi saat data sedang di-fetch |
+| 4 | **SEO & Metadata** | Title, description, Open Graph, keywords, dan `lang="id"` |
+| 5 | **Edit Lapangan** | CRUD lengkap — tambah `PUT /api/courts/[id]` untuk update data |
+| 6 | **Pembatalan Booking** | User bisa cancel booking — tambah `DELETE /api/bookings/[id]` |
+| 7 | **Riwayat Booking** | Section "Riwayat Booking Saya" di User Dashboard |
+| 8 | **Optimistic UI** | Booking & join event terasa instan dengan rollback otomatis |
+| 9 | **Custom Hooks** | Logic dipisah ke `useAuth`, `useCourts`, `useBookings`, `useEvents` |
+| 10 | **Type Safety** | Shared TypeScript interfaces di `app/types/index.ts` |
 
 ---
 
@@ -162,17 +195,39 @@ Pengujian dilakukan berdasarkan aspek kualitas perangkat lunak sesuai standar **
 smashhub/
 ├── app/
 │   ├── api/
-│   │   ├── bookings/route.ts    # API booking (GET, POST)
+│   │   ├── bookings/
+│   │   │   ├── route.ts          # API booking (GET, POST)
+│   │   │   └── [id]/route.ts     # API cancel booking (DELETE)
 │   │   ├── courts/
 │   │   │   ├── route.ts          # API courts (GET, POST)
-│   │   │   └── [id]/route.ts     # API court delete (DELETE)
+│   │   │   └── [id]/route.ts     # API court update & delete (PUT, DELETE)
 │   │   └── events/
 │   │       ├── route.ts          # API events (GET, POST)
 │   │       └── [id]/route.ts     # API join event (GET, POST)
+│   ├── components/
+│   │   ├── Footer.tsx            # Footer component
+│   │   ├── Hero.tsx              # Hero section
+│   │   ├── HomeContent.tsx       # Feature cards & CTA
+│   │   ├── LoginModal.tsx        # Login popup modal
+│   │   ├── Navbar.tsx            # Navigation bar
+│   │   ├── Skeleton.tsx          # Loading skeleton components
+│   │   ├── ToastContainer.tsx    # Toast notification system
+│   │   ├── owner/
+│   │   │   └── OwnerDashboard.tsx  # Owner dashboard
+│   │   └── user/
+│   │       └── UserDashboard.tsx   # User dashboard
+│   ├── hooks/
+│   │   ├── useAuth.ts            # Authentication logic
+│   │   ├── useBookings.ts        # Booking CRUD logic
+│   │   ├── useCourts.ts          # Court CRUD logic
+│   │   ├── useEvents.ts          # Event & join logic
+│   │   └── useToast.ts           # Toast notification state
+│   ├── types/
+│   │   └── index.ts              # Shared TypeScript interfaces
 │   ├── lib/supabase.ts           # Supabase client
 │   ├── globals.css               # Global styles
-│   ├── layout.tsx                # Root layout
-│   └── page.tsx                  # Main page (semua UI)
+│   ├── layout.tsx                # Root layout + SEO metadata
+│   └── page.tsx                  # Main orchestrator (~140 lines)
 ├── prisma/
 │   ├── schema.prisma             # Database schema reference
 │   ├── create_booking_table.sql  # SQL script tabel Booking
@@ -183,7 +238,7 @@ smashhub/
 └── README.md
 ```
 
-## 👥 Tim Pengembang
+## 👥 Pembuat
 
 | Nama | NIM | Kelas |
 |------|-----|------|
