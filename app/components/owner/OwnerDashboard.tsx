@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import { LayoutDashboard, Calendar, Users, Trash2, Edit2, X as XIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { LayoutDashboard, Calendar, Users, Trash2, Edit2, X as XIcon, AlertTriangle } from 'lucide-react';
 import type { Court, EventItem, BookingItem, EventJoinItem } from '@/app/types';
 import { SkeletonTable } from '@/app/components/Skeleton';
 
@@ -34,12 +34,19 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
     allBookings, bookingsLoading, eventParticipants, onSuccess, onError,
   } = props;
 
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<number | null>(null);
+
   const onSubmitCourt = async (e: React.FormEvent) => {
     const r = await handleSaveCourt(e);
     r.success ? onSuccess(r.message) : onError(r.message);
   };
   const onDeleteCourt = async (id: number) => {
-    if (!confirm('Yakin ingin menghapus lapangan ini?')) return;
+    if (confirmingDeleteId !== id) {
+      setConfirmingDeleteId(id);
+      setTimeout(() => setConfirmingDeleteId(prev => prev === id ? null : prev), 3000);
+      return;
+    }
+    setConfirmingDeleteId(null);
     const r = await handleDeleteCourt(id);
     r.success ? onSuccess(r.message) : onError(r.message);
   };
@@ -85,7 +92,13 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
                         </td>
                         <td className="p-6 flex justify-center gap-2">
                           <button onClick={()=>startEditCourt(c)} className="p-2.5 bg-slate-100 text-slate-400 hover:text-blue-600 rounded-xl transition-all"><Edit2 className="w-4 h-4"/></button>
-                          <button onClick={()=>onDeleteCourt(c.id)} className="p-2.5 bg-slate-100 text-slate-400 hover:text-red-500 rounded-xl transition-all"><Trash2 className="w-4 h-4"/></button>
+                          {confirmingDeleteId === c.id ? (
+                            <button onClick={()=>onDeleteCourt(c.id)} className="p-2.5 bg-red-600 text-white rounded-xl transition-all animate-in fade-in zoom-in duration-200 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" title="Klik lagi untuk konfirmasi hapus">
+                              <AlertTriangle className="w-4 h-4"/>
+                            </button>
+                          ) : (
+                            <button onClick={()=>onDeleteCourt(c.id)} className="p-2.5 bg-slate-100 text-slate-400 hover:text-red-500 rounded-xl transition-all"><Trash2 className="w-4 h-4"/></button>
+                          )}
                         </td>
                       </tr>
                     ))}

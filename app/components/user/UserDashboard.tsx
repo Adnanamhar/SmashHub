@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import { Trophy, Calendar, Clock, Users, MapPin, CheckCircle2, X as XIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Trophy, Calendar, Clock, Users, MapPin, CheckCircle2, X as XIcon, AlertTriangle } from 'lucide-react';
 import type { Court, EventItem, BookingItem } from '@/app/types';
 import { SkeletonBookingPanel, SkeletonCard } from '@/app/components/Skeleton';
 
@@ -36,6 +36,9 @@ export default function UserDashboard(props: UserDashboardProps) {
     onSuccess, onError,
   } = props;
 
+  const [confirmingCancelId, setConfirmingCancelId] = useState<number | null>(null);
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
+
   const onBook = async () => {
     const r = await handleBooking();
     r.success ? onSuccess(r.message) : onError(r.message);
@@ -45,8 +48,18 @@ export default function UserDashboard(props: UserDashboardProps) {
     r.success ? onSuccess(r.message) : onError(r.message);
   };
   const onCancel = async (id: number) => {
-    if (!confirm('Yakin ingin membatalkan booking ini?')) return;
+    if (confirmingCancelId !== id) {
+      // First click — show confirmation
+      setConfirmingCancelId(id);
+      // Auto-reset after 3 seconds if user doesn't confirm
+      setTimeout(() => setConfirmingCancelId(prev => prev === id ? null : prev), 3000);
+      return;
+    }
+    // Second click — actually cancel
+    setCancellingId(id);
+    setConfirmingCancelId(null);
     const r = await handleCancelBooking(id);
+    setCancellingId(null);
     r.success ? onSuccess(r.message) : onError(r.message);
   };
 
@@ -137,9 +150,17 @@ export default function UserDashboard(props: UserDashboardProps) {
                         <td className="p-6 font-bold text-slate-700">{b.time}</td>
                         <td className="p-6"><span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-green-100 text-green-700">{b.status}</span></td>
                         <td className="p-6 text-center">
-                          <button onClick={()=>onCancel(b.id)} className="px-4 py-2 bg-red-100 text-red-600 rounded-xl text-xs font-black uppercase hover:bg-red-200 transition-colors flex items-center gap-1 mx-auto">
-                            <XIcon className="w-3 h-3"/> Batalkan
-                          </button>
+                          {cancellingId === b.id ? (
+                            <span className="px-4 py-2 text-slate-400 text-xs font-black uppercase animate-pulse">Membatalkan...</span>
+                          ) : confirmingCancelId === b.id ? (
+                            <button onClick={()=>onCancel(b.id)} className="px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-black uppercase hover:bg-red-700 transition-all flex items-center gap-1 mx-auto animate-in fade-in zoom-in duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                              <AlertTriangle className="w-3 h-3"/> Yakin? Batalkan
+                            </button>
+                          ) : (
+                            <button onClick={()=>onCancel(b.id)} className="px-4 py-2 bg-red-100 text-red-600 rounded-xl text-xs font-black uppercase hover:bg-red-200 transition-colors flex items-center gap-1 mx-auto">
+                              <XIcon className="w-3 h-3"/> Batalkan
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
