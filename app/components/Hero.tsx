@@ -5,9 +5,10 @@ import { Zap, ChevronRight } from 'lucide-react';
 
 interface HeroProps {
   setShowLogin: (v: boolean) => void;
+  setShowRegister: (v: boolean) => void;
 }
 
-export default function Hero({ setShowLogin }: HeroProps) {
+export default function Hero({ setShowLogin, setShowRegister }: HeroProps) {
   return (
     <section className="relative pt-24 pb-32 flex items-center justify-center overflow-hidden bg-black text-white">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -33,13 +34,13 @@ export default function Hero({ setShowLogin }: HeroProps) {
             onClick={() => setShowLogin(true)}
             className="px-10 py-5 bg-red-600 text-white font-black rounded-2xl text-lg hover:scale-[1.03] shadow-xl shadow-red-900/20 transition-all flex items-center gap-3"
           >
-            Cari Lapangan Sekarang <ChevronRight className="w-6 h-6" />
+            Login & Cari Lapangan <ChevronRight className="w-6 h-6" />
           </button>
           <button
-            onClick={() => setShowLogin(true)}
+            onClick={() => setShowRegister(true)}
             className="px-10 py-5 bg-white/5 border border-white/20 text-white font-bold rounded-2xl text-lg hover:bg-white/10 transition-all shadow-sm"
           >
-            Lihat Event Mabar
+            Daftar Akun Baru
           </button>
         </div>
       </div>

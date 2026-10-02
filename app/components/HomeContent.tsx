@@ -5,9 +5,10 @@ import { Calendar, Clock, Users, ShieldCheck } from 'lucide-react';
 
 interface HomeContentProps {
   setShowLogin: (v: boolean) => void;
+  setShowRegister: (v: boolean) => void;
 }
 
-export default function HomeContent({ setShowLogin }: HomeContentProps) {
+export default function HomeContent({ setShowLogin, setShowRegister }: HomeContentProps) {
   return (
     <>
       <section className="py-32 px-6 bg-slate-50">
@@ -38,18 +39,21 @@ export default function HomeContent({ setShowLogin }: HomeContentProps) {
           </h2>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
             <button
-              onClick={() => setShowLogin(true)}
+              onClick={() => setShowRegister(true)}
               className="px-12 py-5 bg-red-600 text-white font-black rounded-2xl hover:scale-105 transition-all text-lg shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]"
             >
-              Mulai Main
+              Daftar Sebagai Player
             </button>
             <button
-              onClick={() => setShowLogin(true)}
+              onClick={() => setShowRegister(true)}
               className="px-12 py-5 bg-blue-600 text-white font-black rounded-2xl hover:scale-105 transition-all text-lg shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]"
             >
-              Daftar GOR
+              Daftar GOR / Owner
             </button>
           </div>
+          <p className="mt-6 text-slate-400 text-sm">
+            Sudah punya akun? <button onClick={() => setShowLogin(true)} className="text-white underline font-bold hover:text-red-400 transition-colors">Login di sini</button>
+          </p>
         </div>
       </section>
     </>

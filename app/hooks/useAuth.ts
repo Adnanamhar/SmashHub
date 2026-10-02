@@ -15,26 +15,14 @@ export function useAuth() {
     full_name: '', phone: '', role: 'user'
   });
 
-  // Restore session on mount
+  // Bersihkan sesi lama saat pertama kali load (keamanan)
   useEffect(() => {
-    const savedRole = localStorage.getItem('role');
-    if (savedRole) {
-      setRole(savedRole);
-      setView('dashboard');
-    }
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
   }, []);
 
-  const handleLogin = useCallback(async (eOrRole?: React.FormEvent | string) => {
-    // Called with string role directly (from CTA buttons in landing page dummy flow, 
-    // but we can keep it for backwards compatibility if they click CTA, or we can just open login)
-    if (typeof eOrRole === 'string') {
-      // For real implementation we probably shouldn't auto login, but let's keep it as is if it's expected
-      // Actually let's just open login if they try to use dummy login.
-      setShowLogin(true);
-      return { success: false, message: '' };
-    }
-
-    if (eOrRole) (eOrRole as React.FormEvent).preventDefault();
+  const handleLogin = useCallback(async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     try {
       const res = await fetch('/api/auth/login', {

@@ -102,8 +102,8 @@ export default function SmashHubApp() {
       {/* Home View */}
       {auth.view === 'home' && (
         <div className="animate-in fade-in duration-1000">
-          <Hero setShowLogin={auth.setShowLogin} />
-          <HomeContent setShowLogin={auth.setShowLogin} />
+          <Hero setShowLogin={auth.setShowLogin} setShowRegister={auth.setShowRegister} />
+          <HomeContent setShowLogin={auth.setShowLogin} setShowRegister={auth.setShowRegister} />
         </div>
       )}
 
