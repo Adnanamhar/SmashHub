@@ -6,15 +6,19 @@ interface LoginModalProps {
   showLogin: boolean;
   loginForm: { username: string; password: string };
   setLoginForm: (form: { username: string; password: string }) => void;
-  handleLogin: (e?: React.FormEvent) => { success: boolean; message: string };
+  handleLogin: () => Promise<{ success: boolean; message: string }>;
   onError: (msg: string) => void;
+  onShowRegister: () => void;
+  onShowForgotPassword: () => void;
 }
 
-export default function LoginModal({ showLogin, loginForm, setLoginForm, handleLogin, onError }: LoginModalProps) {
+export default function LoginModal({ 
+  showLogin, loginForm, setLoginForm, handleLogin, onError, onShowRegister, onShowForgotPassword 
+}: LoginModalProps) {
   if (!showLogin) return null;
 
-  const onSubmit = () => {
-    const result = handleLogin();
+  const onSubmit = async () => {
+    const result = await handleLogin();
     if (!result.success && result.message) {
       onError(result.message);
     }
@@ -45,9 +49,15 @@ export default function LoginModal({ showLogin, loginForm, setLoginForm, handleL
           >
             Masuk Sekarang
           </button>
-          <p className="text-[10px] text-slate-400 font-bold uppercase text-center">
-            user: user/123 | owner: owner/123
-          </p>
+          
+          <div className="flex justify-between mt-4">
+            <button onClick={onShowForgotPassword} className="text-xs font-bold text-blue-600 hover:text-blue-800 uppercase">
+              Lupa Password?
+            </button>
+            <button onClick={onShowRegister} className="text-xs font-bold text-red-600 hover:text-red-800 uppercase">
+              Belum punya akun? Daftar
+            </button>
+          </div>
         </div>
       </div>
     </div>

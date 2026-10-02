@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS "User" (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  full_name VARCHAR(100) NOT NULL,
+  phone VARCHAR(20) DEFAULT '',
+  role VARCHAR(10) DEFAULT 'user',
+  reset_token VARCHAR(255),
+  reset_token_expiry TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);

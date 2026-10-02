@@ -14,6 +14,8 @@ import Navbar from '@/app/components/Navbar';
 import Hero from '@/app/components/Hero';
 import HomeContent from '@/app/components/HomeContent';
 import LoginModal from '@/app/components/LoginModal';
+import RegisterModal from '@/app/components/RegisterModal';
+import ForgotPasswordModal from '@/app/components/ForgotPasswordModal';
 import Footer from '@/app/components/Footer';
 import ToastContainer from '@/app/components/ToastContainer';
 import OwnerDashboard from '@/app/components/owner/OwnerDashboard';
@@ -63,6 +65,28 @@ export default function SmashHubApp() {
         loginForm={auth.loginForm}
         setLoginForm={auth.setLoginForm}
         handleLogin={auth.handleLogin}
+        onError={toast.error}
+        onShowRegister={() => { auth.setShowLogin(false); auth.setShowRegister(true); }}
+        onShowForgotPassword={() => { auth.setShowLogin(false); auth.setShowForgotPassword(true); }}
+      />
+
+      <RegisterModal
+        showRegister={auth.showRegister}
+        registerForm={auth.registerForm}
+        setRegisterForm={auth.setRegisterForm}
+        handleRegister={auth.handleRegister}
+        onShowLogin={() => { auth.setShowRegister(false); auth.setShowLogin(true); }}
+        onSuccess={toast.success}
+        onError={toast.error}
+      />
+
+      <ForgotPasswordModal
+        showForgotPassword={auth.showForgotPassword}
+        setShowForgotPassword={auth.setShowForgotPassword}
+        handleForgotPassword={auth.handleForgotPassword}
+        handleResetPassword={auth.handleResetPassword}
+        onShowLogin={() => { auth.setShowForgotPassword(false); auth.setShowLogin(true); }}
+        onSuccess={toast.success}
         onError={toast.error}
       />
 
