@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/app/lib/supabase';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
@@ -28,25 +30,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Role tidak valid. Pilih "user" atau "owner"' }, { status: 400 });
     }
 
-    // 2. Cek duplikat username
-    const { data: existingUsername } = await supabase
-      .from('User')
-      .select('id')
-      .eq('username', username)
-      .maybeSingle();
+    // 2. Cek duplikat username atau email
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email }
+        ]
+      }
+    });
 
-    if (existingUsername) {
-      return NextResponse.json({ success: false, message: 'Username sudah digunakan' }, { status: 409 });
-    }
-
-    // 3. Cek duplikat email
-    const { data: existingEmail } = await supabase
-      .from('User')
-      .select('id')
-      .eq('email', email)
-      .maybeSingle();
-
-    if (existingEmail) {
+    if (existingUser) {
+      if (existingUser.username === username) {
+        return NextResponse.json({ success: false, message: 'Username sudah digunakan' }, { status: 409 });
+      }
       return NextResponse.json({ success: false, message: 'Email sudah terdaftar' }, { status: 409 });
     }
 
@@ -54,19 +51,16 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // 5. Simpan ke database
-    const { data, error } = await supabase.from('User').insert([{
-      username,
-      email,
-      password: hashedPassword,
-      full_name: full_name.trim(),
-      phone: phone || '',
-      role
-    }]).select();
-
-    if (error) {
-      console.error('Register error:', error);
-      return NextResponse.json({ success: false, message: 'Gagal menyimpan data. Coba lagi.' }, { status: 500 });
-    }
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+        full_name: full_name.trim(),
+        phone: phone || '',
+        role
+      }
+    });
 
     return NextResponse.json({ success: true, message: `Registrasi sebagai ${role === 'owner' ? 'Owner Lapangan' : 'Player'} berhasil!` }, { status: 201 });
   } catch (error: any) {

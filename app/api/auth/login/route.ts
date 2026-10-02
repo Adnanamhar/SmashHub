@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/app/lib/supabase';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
@@ -10,17 +12,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Username dan password wajib diisi' }, { status: 400 });
     }
 
-    // Cari user berdasarkan username
-    const { data: user, error } = await supabase
-      .from('User')
-      .select('*')
-      .eq('username', username)
-      .maybeSingle();
-
-    if (error) {
-      console.error('Login query error:', error);
-      return NextResponse.json({ success: false, message: 'Terjadi kesalahan server' }, { status: 500 });
-    }
+    const user = await prisma.user.findUnique({
+      where: { username }
+    });
 
     if (!user) {
       return NextResponse.json({ success: false, message: 'Username tidak ditemukan' }, { status: 404 });
