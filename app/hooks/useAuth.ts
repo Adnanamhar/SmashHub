@@ -50,6 +50,7 @@ export function useAuth() {
       setView('dashboard');
       setShowLogin(false);
       localStorage.setItem('role', data.role);
+      localStorage.setItem('username', data.username);
       return { success: true, message: data.message };
     } catch (err) {
       return { success: false, message: 'Gagal menghubungi server' };
@@ -102,6 +103,7 @@ export function useAuth() {
     setRole('guest');
     setView('home');
     localStorage.removeItem('role');
+    localStorage.removeItem('username');
   }, []);
 
   return {
